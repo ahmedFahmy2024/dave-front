@@ -3,13 +3,15 @@ import { useParams } from 'react-router-dom'
 import EditNoteForm from './EditNoteForm';
 import { fetchUsers } from '../../app/api/UsersFn';
 import { fetchNote } from '../../app/api/NotesFn';
+import useAxiosPrivate from '../../app/hooks/useAxiosPrivate';
 
 const EditNote = () => {
+  const axiosPrivate = useAxiosPrivate();
   const { id } = useParams()
 
   const { data, isLoading: userLoading } = useQuery({
     queryKey: ["users"],
-    queryFn: fetchUsers,
+    queryFn: () => fetchUsers(axiosPrivate),
     staleTime: 5 * 60 * 1000, // 5 minutes
     refetchOnWindowFocus: false,
   });
@@ -17,7 +19,7 @@ const EditNote = () => {
     // Fetch note
     const { data: note, isLoading } = useQuery({
       queryKey: ["notes", id],
-      queryFn: () => fetchNote(id),
+      queryFn: () => fetchNote(axiosPrivate, id),
       staleTime: 5 * 60 * 1000, // 5 minutes
       refetchOnWindowFocus: false,
     });

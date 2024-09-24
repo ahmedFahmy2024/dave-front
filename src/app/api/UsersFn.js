@@ -1,9 +1,10 @@
-import { Axios } from "./Axios";
-import { BASE_URL, USERS } from "./EndPoints";
+// usersFn.js file
 
-export const fetchUsers = async () => {
+import { USERS } from "./EndPoints";
+
+export const fetchUsers = async (axiosPrivate) => {
     try {
-        const response = await Axios.get(`${BASE_URL}${USERS}`);
+        const response = await axiosPrivate.get(USERS);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -11,9 +12,9 @@ export const fetchUsers = async () => {
     }
 }
 
-export const fetchUser = async (id) => {
+export const fetchUser = async (axiosPrivate, id) => {
     try {
-        const response = await Axios.get(`${BASE_URL}${USERS}/${id}`);
+        const response = await axiosPrivate.get(`${USERS}/${id}`);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -21,9 +22,9 @@ export const fetchUser = async (id) => {
     }
 }
 
-export const createUser = async (data) => {
+export const createUser = async (axiosPrivate, data) => {
     try {
-        const response = await Axios.post(`${BASE_URL}${USERS}`, data);
+        const response = await axiosPrivate.post(`${USERS}`, data);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -31,9 +32,9 @@ export const createUser = async (data) => {
     }
 }
 
-export const updateUser = async ({ id, ...data }) => {
+export const updateUser = async (axiosPrivate, { id, ...data }) => {
     try {
-        const response = await Axios.patch(`${BASE_URL}${USERS}/${id}`, data);
+        const response = await axiosPrivate.patch(`${USERS}/${id}`, data);
         return response.data;
     } catch (error) {
         console.error('Error updating user:', error);
@@ -41,9 +42,9 @@ export const updateUser = async ({ id, ...data }) => {
     }
 }
 
-export const deleteUser = async (id) => {
+export const deleteUser = async (axiosPrivate, id) => {
     try {
-        const response = await Axios.delete(`${BASE_URL}${USERS}/${id}`);
+        const response = await axiosPrivate.delete(`${USERS}/${id}`);
         return response.data;
     } catch (error) {
         console.error('Error deleting user:', error);

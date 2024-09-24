@@ -10,37 +10,48 @@ import EditUser from "./features/users/EditUser";
 import NewUser from "./features/users/NewUser";
 import EditNote from "./features/notes/EditNote";
 import NewNote from "./features/notes/NewNote";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
+import PersistLogin from "./components/PersistLogin";
+import RequireAuth from "./features/auth/RequireAuth";
+import { ROLES } from "./config/roles";
 
 function App() {
-
   return (
     <>
-    <Toaster position="top-center" reverseOrder={false} />
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Public />} />
-        <Route path="login" element={<Login />} />
-        <Route path="dash" element={<DashLayout />}>
-          <Route index element={<Welcome />} />
+      <Toaster position="top-center" reverseOrder={false} />
+      <Routes>
+        <Route path="/" element={<Layout />}>
 
-          <Route path="users">
-            <Route index element={<UsersList />} />
-            <Route path=":id" element={<EditUser />} />
-            <Route path="new" element={<NewUser />} />
+          {/* public routes */}
+          <Route index element={<Public />} />
+          <Route path="login" element={<Login />} />
+
+          {/* we want to protect these routes */}
+          <Route element={<PersistLogin />}>
+            <Route element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}>
+              <Route path="dash" element={<DashLayout />}>
+                <Route index element={<Welcome />} />
+
+                <Route element={<RequireAuth allowedRoles={[ROLES.Manager, ROLES.Admin]} />}>
+                  <Route path="users">
+                    <Route index element={<UsersList />} />
+                    <Route path=":id" element={<EditUser />} />
+                    <Route path="new" element={<NewUser />} />
+                  </Route>
+                </Route>
+
+                <Route path="notes">
+                  <Route index element={<NotesList />} />
+                  <Route path=":id" element={<EditNote />} />
+                  <Route path="new" element={<NewNote />} />
+                </Route>
+              </Route> {/* End DashLayout */}
+            </Route>
           </Route>
 
-          <Route path="notes">
-            <Route index element={<NotesList />} />
-            <Route path=":id" element={<EditNote />} />
-            <Route path="new" element={<NewNote />} />
-          </Route>
+        </Route> {/* End Layout */}
 
-        </Route> {/* End DashLayout */}
-        
-      </Route> {/* End Layout */}
-      
-    </Routes>
+      </Routes>
     </>
   );
 }

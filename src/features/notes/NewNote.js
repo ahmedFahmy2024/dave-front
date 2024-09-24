@@ -18,6 +18,7 @@ const NewNote = () => {
     return <h1>Error: {error.message}</h1>;
   }
 
+  
   const users = data?.users || [];
 
   const content = users ? <NewNoteForm users={users} /> : <h1>No users found</h1>;

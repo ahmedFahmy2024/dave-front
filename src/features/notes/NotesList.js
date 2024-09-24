@@ -1,11 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchNotes } from "../../app/api/NotesFn";
 import Note from "./Note";
+import useAuthHooks from "../../app/hooks/useAuth";
+import useAxiosPrivate from "../../app/hooks/useAxiosPrivate";
 
 const NotesList = () => {
+  const axiosPrivate = useAxiosPrivate();
+  const { username, isManager, isAdmin } = useAuthHooks();
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["notes"],
-    queryFn: () => fetchNotes(),
+    queryFn: () => fetchNotes(axiosPrivate),
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
@@ -18,14 +23,20 @@ const NotesList = () => {
   }
 
   // Check if the data has the expected structure
-  const notes = data?.notes || [];
+  const allNotes  = data?.notes || [];
 
-    // Sort the notes to put completed notes at the bottom
-    const sortedNotes = notes.sort((a, b) => a.completed - b.completed);
+  // Filter notes based on user role
+  const filteredNotes = isManager || isAdmin
+    ? allNotes
+    : allNotes.filter(note => note.username === username);
 
-  const tableContent = notes?.length
-    ? notes.map((note) => <Note key={note._id} note={note} />)
+  const tableContent = filteredNotes?.length
+    ? filteredNotes.map((note) => <Note key={note._id} note={note} />)
     : null;
+
+    if (!tableContent) {
+    return <h1>No notes found</h1>;
+  }
 
   return (
     <table className="table table--notes">

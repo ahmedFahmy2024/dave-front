@@ -5,8 +5,10 @@ import { createNote } from "../../app/api/NotesFn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { toast } from 'react-hot-toast';
+import useAxiosPrivate from "../../app/hooks/useAxiosPrivate";
 
 const NewNoteForm = ({ users }) => {
+  const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [title, setTitle] = useState("");
@@ -15,7 +17,7 @@ const NewNoteForm = ({ users }) => {
   const [errorMsg, setErrorMsg] = useState("");
 
   const mutation = useMutation({
-    mutationFn: createNote,
+    mutationFn: (data) => createNote(axiosPrivate, data),
     onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["notes"] });
         toast.success('Note created successfully!');

@@ -2,11 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { fetchUsers } from "../../app/api/UsersFn";
 import User from "./User";
+import useAxiosPrivate from "../../app/hooks/useAxiosPrivate";
 
 const UsersList = () => {
+  const axiosPrivate = useAxiosPrivate();
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["users"],
-    queryFn: fetchUsers,
+    queryFn: () => fetchUsers(axiosPrivate),
     staleTime: 5 * 60 * 1000, // 5 minutes
     refetchOnWindowFocus: false,
   });

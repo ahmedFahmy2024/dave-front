@@ -6,11 +6,14 @@ import { ROLES } from "../../config/roles";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchUser, updateUser, deleteUser } from "../../app/api/UsersFn";
 import { toast } from 'react-hot-toast';
+import useAxiosPrivate from "../../app/hooks/useAxiosPrivate";
 
 const USER_REGEX = /^[A-z]{3,20}$/;
 const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/;
 
 const EditUser = () => {
+  const axiosPrivate = useAxiosPrivate();
+
   const { id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -26,7 +29,7 @@ const EditUser = () => {
   // Fetch user data
   const { data: userData, isLoading, isError } = useQuery({
     queryKey: ["users", id],
-    queryFn: () => fetchUser(id),
+    queryFn: () => fetchUser(axiosPrivate, id),
     staleTime: 5 * 60 * 1000, // 5 minutes
     refetchOnWindowFocus: false,
   });
@@ -64,7 +67,7 @@ const EditUser = () => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: updateUser,
+    mutationFn: (data) => updateUser(axiosPrivate, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       toast.success("User updated successfully");
@@ -78,7 +81,7 @@ const EditUser = () => {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: deleteUser,
+    mutationFn: (id) => deleteUser(axiosPrivate, id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       toast.success("User deleted successfully");

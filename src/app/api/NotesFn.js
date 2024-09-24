@@ -1,10 +1,8 @@
-import { Axios } from "./Axios";
-import { BASE_URL, NOTES } from "./EndPoints";
+import { NOTES } from "./EndPoints";
 
-
-export const fetchNotes = async () => {
+export const fetchNotes = async (axiosPrivate) => {
     try {
-        const response = await Axios.get(`${BASE_URL}${NOTES}`);
+        const response = await axiosPrivate.get(NOTES);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -12,9 +10,9 @@ export const fetchNotes = async () => {
     }
 }
 
-export const fetchNote = async (id) => {
+export const fetchNote = async (axiosPrivate, id) => {
     try {
-        const response = await Axios.get(`${BASE_URL}${NOTES}/${id}`);
+        const response = await axiosPrivate.get(`${NOTES}/${id}`);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -22,9 +20,9 @@ export const fetchNote = async (id) => {
     }
 }
 
-export const createNote = async (data) => {
+export const createNote = async (axiosPrivate, data) => {
     try {
-        const response = await Axios.post(`${BASE_URL}${NOTES}`, data);
+        const response = await axiosPrivate.post(`${NOTES}`, data);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -32,11 +30,11 @@ export const createNote = async (data) => {
     }
 }
 
-export const updateNote = async ({ id, ...data }) => {
+export const updateNote = async (axiosPrivate, { id, ...data }) => {
     console.log(data);
     console.log(id);
     try {
-        const response = await Axios.patch(`${BASE_URL}${NOTES}/${id}`, data);
+        const response = await axiosPrivate.patch(`${NOTES}/${id}`, data);
         return response.data;
     } catch (error) {
         console.error('Error updating user:', error);
@@ -44,9 +42,9 @@ export const updateNote = async ({ id, ...data }) => {
     }
 }
 
-export const deleteNote = async (id) => {
+export const deleteNote = async (axiosPrivate, id) => {
     try {
-        const response = await Axios.delete(`${BASE_URL}${NOTES}/${id}`);
+        const response = await axiosPrivate.delete(`${NOTES}/${id}`);
         return response.data;
     } catch (error) {
         console.error('Error deleting user:', error);

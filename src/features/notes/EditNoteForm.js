@@ -5,8 +5,12 @@ import { deleteNote, updateNote } from "../../app/api/NotesFn";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from 'react-hot-toast';
+import useAuthHooks from "../../app/hooks/useAuth";
+import useAxiosPrivate from "../../app/hooks/useAxiosPrivate";
 
 const EditNoteForm = ({ users, note }) => {
+  const axiosPrivate = useAxiosPrivate();
+  const { isManager, isAdmin } = useAuthHooks();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [title, setTitle] = useState(note.title);
@@ -16,7 +20,7 @@ const EditNoteForm = ({ users, note }) => {
   const [errorMsg, setErrorMsg] = useState("");
 
   const updateMutation = useMutation({
-    mutationFn: updateNote,
+    mutationFn: (data) => updateNote(axiosPrivate, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
       toast.success("Note updated successfully");
@@ -30,7 +34,7 @@ const EditNoteForm = ({ users, note }) => {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: deleteNote,
+    mutationFn: (id) => deleteNote(axiosPrivate, id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
       toast.success("Note deleted successfully");
@@ -93,6 +97,19 @@ const EditNoteForm = ({ users, note }) => {
 
   const errContent = errorMsg?.data?.message ?? "";
 
+  let deleteButton = null
+  if (isManager || isAdmin) {
+      deleteButton = (
+          <button
+              className="icon-button"
+              title="Delete"
+              onClick={onDeleteNoteClicked}
+          >
+              <FontAwesomeIcon icon={faTrashCan} />
+          </button>
+      )
+  }
+
   return (
     <>
       <p className={errClass}>{errContent}</p>
@@ -109,13 +126,7 @@ const EditNoteForm = ({ users, note }) => {
             >
               <FontAwesomeIcon icon={faSave} />
             </button>
-            <button
-              className="icon-button"
-              title="Delete"
-              onClick={onDeleteNoteClicked}
-            >
-              <FontAwesomeIcon icon={faTrashCan} />
-            </button>
+            {deleteButton}
           </div>
         </div>
         <label className="form__label" htmlFor="note-title">
