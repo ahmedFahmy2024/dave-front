@@ -14,8 +14,10 @@ import { Toaster } from "react-hot-toast";
 import PersistLogin from "./components/PersistLogin";
 import RequireAuth from "./features/auth/RequireAuth";
 import { ROLES } from "./config/roles";
+import useTitle from "./app/hooks/useTitle";
 
 function App() {
+  useTitle("Dan D. Repairs");
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />

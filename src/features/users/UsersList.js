@@ -3,8 +3,10 @@ import React from "react";
 import { fetchUsers } from "../../app/api/UsersFn";
 import User from "./User";
 import useAxiosPrivate from "../../app/hooks/useAxiosPrivate";
+import useTitle from "../../app/hooks/useTitle";
 
 const UsersList = () => {
+  useTitle('techNotes: Users List')
   const axiosPrivate = useAxiosPrivate();
 
   const { data, isLoading, error } = useQuery({

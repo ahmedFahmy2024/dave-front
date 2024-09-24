@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchUsers } from '../../app/api/UsersFn';
 import NewNoteForm from './NewNoteForm';
+import useTitle from '../../app/hooks/useTitle';
 
 const NewNote = () => {
+  useTitle('techNotes: New Note')
   const { data, isLoading, error } = useQuery({
     queryKey: ["users"],
     queryFn: fetchUsers,

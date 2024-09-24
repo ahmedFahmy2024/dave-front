@@ -7,11 +7,13 @@ import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { ROLES } from "../../config/roles";
 import { toast } from 'react-hot-toast';
 import useAxiosPrivate from "../../app/hooks/useAxiosPrivate";
+import useTitle from "../../app/hooks/useTitle";
 
 const USER_REGEX = /^[A-z]{3,20}$/;
 const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/;
 
 const NewUser = () => {
+  useTitle('techNotes: New User')
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const queryClient = useQueryClient();

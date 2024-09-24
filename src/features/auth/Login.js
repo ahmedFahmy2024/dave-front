@@ -6,8 +6,10 @@ import toast from "react-hot-toast";
 import { useAuth } from "../../context/AuthProvider";
 import { Axios } from "../../app/api/Axios";
 import { LOGIN_URL } from "../../app/api/EndPoints";
+import useTitle from "../../app/hooks/useTitle";
 
 const Login = () => {
+  useTitle('Employee Login')
   const { setAuth, persist, setPersist } = useAuth();
   const userRef = useRef();
   const errRef = useRef();

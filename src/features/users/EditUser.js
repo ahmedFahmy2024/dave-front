@@ -7,11 +7,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchUser, updateUser, deleteUser } from "../../app/api/UsersFn";
 import { toast } from 'react-hot-toast';
 import useAxiosPrivate from "../../app/hooks/useAxiosPrivate";
+import useTitle from "../../app/hooks/useTitle";
 
 const USER_REGEX = /^[A-z]{3,20}$/;
 const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/;
 
 const EditUser = () => {
+  useTitle('techNotes: Edit User')
+
   const axiosPrivate = useAxiosPrivate();
 
   const { id } = useParams();

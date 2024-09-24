@@ -3,8 +3,10 @@ import { fetchNotes } from "../../app/api/NotesFn";
 import Note from "./Note";
 import useAuthHooks from "../../app/hooks/useAuth";
 import useAxiosPrivate from "../../app/hooks/useAxiosPrivate";
+import useTitle from "../../app/hooks/useTitle";
 
 const NotesList = () => {
+  useTitle('techNotes: Notes List')
   const axiosPrivate = useAxiosPrivate();
   const { username, isManager, isAdmin } = useAuthHooks();
 

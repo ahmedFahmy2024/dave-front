@@ -4,8 +4,10 @@ import EditNoteForm from './EditNoteForm';
 import { fetchUsers } from '../../app/api/UsersFn';
 import { fetchNote } from '../../app/api/NotesFn';
 import useAxiosPrivate from '../../app/hooks/useAxiosPrivate';
+import useTitle from '../../app/hooks/useTitle';
 
 const EditNote = () => {
+  useTitle('techNotes: Edit Note')
   const axiosPrivate = useAxiosPrivate();
   const { id } = useParams()
 
